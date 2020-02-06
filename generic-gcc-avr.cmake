@@ -232,6 +232,7 @@ function(add_avr_executable EXECUTABLE_NAME)
    add_custom_target(
       upload_${EXECUTABLE_NAME}
       ${AVR_UPLOADTOOL} ${AVR_UPLOADTOOL_BASE_OPTIONS} ${AVR_UPLOADTOOL_OPTIONS}
+	     -D
          -U flash:w:${hex_file}
          -P ${AVR_UPLOADTOOL_PORT}
       DEPENDS ${hex_file}
@@ -243,6 +244,7 @@ function(add_avr_executable EXECUTABLE_NAME)
    add_custom_target(
       upload_${EXECUTABLE_NAME}_eeprom
       ${AVR_UPLOADTOOL} ${AVR_UPLOADTOOL_BASE_OPTIONS} ${AVR_UPLOADTOOL_OPTIONS}
+	     -D
          -U eeprom:w:${eeprom_image}
          -P ${AVR_UPLOADTOOL_PORT}
       DEPENDS ${eeprom_image}
@@ -372,6 +374,7 @@ function(avr_generate_fixed_targets)
    add_custom_target(
       get_fuses
       ${AVR_UPLOADTOOL} ${AVR_UPLOADTOOL_BASE_OPTIONS} -P ${AVR_UPLOADTOOL_PORT} -n
+		 -U efuse:r:-:b
          -U lfuse:r:-:b
          -U hfuse:r:-:b
       COMMENT "Get fuses from ${AVR_MCU}"
@@ -381,6 +384,7 @@ function(avr_generate_fixed_targets)
    add_custom_target(
       set_fuses
       ${AVR_UPLOADTOOL} ${AVR_UPLOADTOOL_BASE_OPTIONS} -P ${AVR_UPLOADTOOL_PORT}
+		 -U efuse:w:${AVR_E_FUSE}:m
          -U lfuse:w:${AVR_L_FUSE}:m
          -U hfuse:w:${AVR_H_FUSE}:m
          COMMENT "Setup: High Fuse: ${AVR_H_FUSE} Low Fuse: ${AVR_L_FUSE}"
