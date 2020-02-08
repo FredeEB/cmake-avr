@@ -108,7 +108,7 @@ if(NOT AVR_SIZE_ARGS)
 endif(NOT AVR_SIZE_ARGS)
 
 # prepare base flags for upload tool
-set(AVR_UPLOADTOOL_BASE_OPTIONS -p ${AVR_MCU} -c ${AVR_PROGRAMMER})
+set(AVR_UPLOADTOOL_BASE_OPTIONS -p ${AVR_MCU} -c ${AVR_PROGRAMMER} -D)
 
 # use AVR_UPLOADTOOL_BAUDRATE as baudrate for upload tool (if defined)
 if(AVR_UPLOADTOOL_BAUDRATE)
@@ -232,7 +232,6 @@ function(add_avr_executable EXECUTABLE_NAME)
    add_custom_target(
       upload_${EXECUTABLE_NAME}
       ${AVR_UPLOADTOOL} ${AVR_UPLOADTOOL_BASE_OPTIONS} ${AVR_UPLOADTOOL_OPTIONS}
-	     -D
          -U flash:w:${hex_file}
          -P ${AVR_UPLOADTOOL_PORT}
       DEPENDS ${hex_file}
@@ -244,7 +243,6 @@ function(add_avr_executable EXECUTABLE_NAME)
    add_custom_target(
       upload_${EXECUTABLE_NAME}_eeprom
       ${AVR_UPLOADTOOL} ${AVR_UPLOADTOOL_BASE_OPTIONS} ${AVR_UPLOADTOOL_OPTIONS}
-	     -D
          -U eeprom:w:${eeprom_image}
          -P ${AVR_UPLOADTOOL_PORT}
       DEPENDS ${eeprom_image}
@@ -342,7 +340,7 @@ function(avr_target_include_directories EXECUTABLE_TARGET)
     get_target_property(TARGET_LIST ${EXECUTABLE_TARGET} OUTPUT_NAME)
     set(extra_args ${ARGN})
 
-    target_include_directories(${TARGET_LIST} ${extra_args})
+    target_include_directories(${TARGET_LIST} PUBLIC ${extra_args})
 endfunction()
 
 ##########################################################################
